@@ -1,0 +1,216 @@
+{% comment %}
+  Renders a standard dropdown style menu for the header.
+
+  Usage:
+  {% render 'header-dropdown-menu' %}
+{% endcomment %}
+
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li class="menu-item">
+        {%- if link.links != blank -%}
+          <div class="menu-container">
+             <!-- <a id="HeaderMenu-{{ link.handle }}" href="{{ link.url }}" class="header__menu-item list-menu__item link focus-inset">
+              <span
+                {%- if link.child_active %}
+                  class="header__active-menu-item"
+                {% endif %}
+              >
+                {{- link.title | escape -}}
+              </span>
+
+            </a> -->
+            <a id="HeaderMenu-{{ link.handle }}" href="{% if request.path contains '/fr' %}
+
+                {%- if link.title == 'PICC & Midline' -%} 
+                    https://piccline.ch/fr/information-picc-midline
+                {% elsif link.title == 'Exit-Pocket' -%} 
+                    https://piccline.ch/fr/information-exit-pocket
+                {% elsif link.title == 'Protection de douche' -%} 
+                    https://piccline.ch/fr/limbo-protection-de-douche-mcm-medsys
+                {% elsif link.title == 'Téléchargements' -%} 
+                    https://piccline.ch/fr/downloads
+                {% elsif link.title == 'Contact' -%} 
+                    https://piccline.ch/fr/contact
+                {% elsif link.title == 'Accueil' -%} 
+                    https://piccline.ch/fr/
+                {% else -%}
+                    {{ link.url }}
+                {% endif %}
+            {%- else -%}
+               {{ link.url }}
+            {% endif %}" class="header__menu-item list-menu__item link focus-inset yy">
+                <span
+                    {%- if link.child_active %}
+                        class="header__active-menu-item"
+                    {% endif %}
+                >
+                    {{ link.title | escape }}
+                </span>
+            </a>
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+            <ul
+              id="HeaderMenu-MenuList-{{ forloop.index }}"
+              class="header__submenu list-menu list-menu--disclosure color-{{ section.settings.menu_color_scheme }} gradient caption-large motion-reduce global-settings-popup"
+              role="list"
+            >
+              {%- for childlink in link.links -%}
+                <li class="submenu-item">
+                  {%- if childlink.links == blank -%}
+                    <a
+                      id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                      href="{% if request.path contains '/fr' %}
+                         {%- if childlink.title == 'Informations' and link.title == 'PICC & Midline' -%} 
+                             https://piccline.ch/fr/information-picc-midline
+                         {% elsif childlink.title == 'Informations' and link.title == 'Exit-Pocket' -%} 
+                             https://piccline.ch/fr/information-exit-pocket
+                         {% elsif childlink.title == 'Informations' and link.title == 'Protection de douche' -%} 
+                             https://piccline.ch/fr/limbo-protection-de-douche-mcm-medsys
+                         {% else -%}
+                             {{ childlink.url }} 
+                         {% endif %}
+                      {%- else -%}
+                          {{ childlink.url }}
+                      {% endif %}"
+                      class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if childlink.current %} list-menu__item--active{% endif %}"
+                      {% if childlink.current %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      {{ childlink.title | escape }}
+                    </a>
+                  
+                  {%- else -%}
+                    <div class="submenu-container">
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        class="header__menu-item link link--text list-menu__item focus-inset caption-large"
+                        href="{{ childlink.url }}"
+                      >
+                        <span>{{ childlink.title | escape }}</span>
+                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                      </a>
+                      <ul
+                        id="HeaderMenu-SubMenuList-{{ link.handle }}-{{ childlink.handle }}"
+                        class="header__submenu list-menu motion-reduce"
+                      >
+                        {%- for grandchildlink in childlink.links -%}
+                          <li>
+                            <a
+                              id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                              href="{{ grandchildlink.url }}"
+                              class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"
+                              {% if grandchildlink.current %}
+                                aria-current="page"
+                              {% endif %}
+                            >
+                              {{ grandchildlink.title | escape }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- else -%}
+           <a id="HeaderMenu-{{ link.handle }}" href="{% if request.path contains '/fr' %}
+
+                {%- if link.title == 'PICC & Midline' -%} 
+                    https://piccline.ch/fr/information-picc-midline
+                {% elsif link.title == 'Exit-Pocket' -%} 
+                    https://piccline.ch/fr/information-exit-pocket
+                {% elsif link.title == 'Protection de douche' -%} 
+                    https://piccline.ch/fr/limbo-protection-de-douche-mcm-medsys
+                {% elsif link.title == 'Téléchargements' -%} 
+                    https://piccline.ch/fr/downloads
+                {% elsif link.title == 'Contact' -%} 
+                    https://piccline.ch/fr/contact
+                {% elsif link.title == 'Accueil' -%} 
+                    https://piccline.ch/fr/
+                {% else -%}
+                    {{ link.url }} 
+                {% endif %}
+            {%- else -%}
+               {{ link.url }}
+            {% endif %}" class="header__menu-item list-menu__item link focus-inset">
+                <span
+                    {%- if link.child_active %}
+                        class="header__active-menu-item"
+                    {% endif %}
+                >
+                    {{ link.title | escape }}
+                </span>
+            </a>
+          
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+    <li class="menu_item" style="margin-top:5px;"><a class="webseite_button" href="{{ section.settings.webseite_button_url }}" target="_blank">{{ section.settings.webseite_button_label }}</a></li>
+  </ul>
+</nav>
+
+
+<style>
+  /* Style the menu container */
+.menu-container, .submenu-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Hide submenus by default */
+.header__submenu {
+  display: none;
+  z-index:999 !important;
+}
+
+/* Show submenu on hover */
+.menu-container:hover > .header__submenu,
+.submenu-container:hover > .header__submenu {
+  display: block;
+}
+
+/* Style the submenu items */
+.header__submenu li {
+  padding: 5px 15px;
+}
+
+/* Ensure submenu does not disappear when hovered */
+.header__submenu:hover {
+  display: block;
+}
+
+/* Style dropdown arrows */
+.icon-caret {
+  margin-left: 5px;
+  transition: transform 0.2s ease;
+}
+
+/* Rotate caret on hover */
+.menu-container:hover > a .icon-caret,
+.submenu-container:hover > a .icon-caret {
+  transform: rotate(180deg);
+}
+
+  .menu-container .icon-caret {
+    position: absolute;
+    height: .6rem;
+    right: -5px; 
+    top: calc(50% - .2rem);
+  }
+.list-menu.list-menu--inline{
+  gap:10px;
+}
+.icon-caret path{
+  color: #0d3d6d;
+}
+.header__menu-item:hover{
+  opacity: 0.75;
+}
+.submenu-item .header__menu-item:hover{
+  opacity: 1;
+}
+</style>
