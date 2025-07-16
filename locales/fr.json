@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "password_page": {
@@ -108,6 +117,8 @@
   "products": {
     "product": {
       "add_to_cart": "Ajouter au panier",
+      "select_option":"Veuillez sélectionner le {{ option_name }}",
+      "option_error":"Veuillez sélectionner les options de votre produit.",
       "description": "Description",
       "on_sale": "Promotion",
       "product_variants": "Variantes de produits",
@@ -163,7 +174,7 @@
       "value_unavailable": "{{ option_value }} – indisponible",
       "variant_sold_out_or_unavailable": "Variante épuisée ou indisponible",
       "inventory_in_stock": "En stock",
-      "inventory_in_stock_show_count": "{{ quantity }} en stock",
+      "inventory_in_stock_show_count": "En stock",
       "inventory_low_stock": "Stock bas",
       "inventory_low_stock_show_count": "Stock bas : {{ quantity }} restant(s)",
       "sku": "SKU",

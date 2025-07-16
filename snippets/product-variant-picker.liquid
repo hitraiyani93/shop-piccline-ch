@@ -72,6 +72,7 @@
               name="options[{{ option.name | escape }}]"
               form="{{ product_form_id }}"
             >
+              <option class="first-select-option disabled_option">{{ 'products.product.select_option' | t: option_name: option.name }}</option>
               {% render 'product-variant-options',
                 product: product,
                 option: option,
@@ -92,3 +93,100 @@
     </script>
   </variant-selects>
 {%- endunless -%}
+ <script>
+  // Initialize variant auto-switcher
+  function initVariantAutoSwitch() {
+    // Get all variant option containers
+    const variantSelects = document.querySelectorAll('variant-selects');
+    
+    variantSelects.forEach(container => {
+      // Listen for changes in any option selector
+      
+      container.addEventListener('change', function(event) {
+        const target = event.target;
+        // Handle dropdown selects
+        
+        if (target.tagName === 'SELECT') {
+          const selectedOption = target.options[target.selectedIndex];
+          document.querySelector('.product-form__submit.button').classList.remove('disabled');
+          if (selectedOption.classList.contains('disabled_option')) {
+            // Remove selection from the disabled option
+            selectedOption.selected = false;
+            // Find the first available option
+            const firstAvailable = target.querySelector('option:not(.disabled_option)');
+            
+            if (firstAvailable) {
+              firstAvailable.selected = true;
+              target.value = firstAvailable.value;
+              console.log(firstAvailable, 'available');
+              setTimeout(() => {
+                const addToCartButton = document.querySelector('.product-form__submit.button');
+                addToCartButton.removeAttribute("disabled");
+                firstAvailable.setAttribute('selected', 'selected')
+                // firstAvailable.trigger('change');
+                
+                addToCartButton.querySelector('span').textContent = window.variantStrings.addToCart;
+                addToCartButton.classList.remove('disabled');
+              }, 20);
+              console.log('target',target)
+              target.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+          /*if (selectedOption.classList.contains('first-select-option')) {
+            selectedOption.classList.add('disabled_option')
+          }*/
+        }
+        
+        // Handle radio buttons
+        if (target.type === 'radio') {
+          if (target.classList.contains('disabled')) {
+            const radioGroup = document.querySelectorAll(`input[name="${target.name}"]`);
+            const firstAvailable = Array.from(radioGroup).find(radio => 
+              !radio.classList.contains('disabled')
+            );
+            if (firstAvailable) {
+              firstAvailable.checked = true;
+              firstAvailable.classList.remove('disabled');
+              setTimeout(() => {
+                const addToCartButton = document.querySelector('.product-form__submit.button');
+                addToCartButton.removeAttribute("disabled");
+                target.setAttribute('selected', 'selected')
+                addToCartButton.querySelector('span').textContent = 'In den Warenkorb';
+              }, 20);
+              firstAvailable.dispatchEvent(new Event('change', { bubbles: true }));            
+            }
+          }
+        }
+      });
+    });
+
+    // Initial check for pre-selected disabled options
+    /*document.querySelectorAll('select, input[type="radio"]').forEach(input => {
+      if ((input.tagName === 'SELECT' && input.querySelector('option:checked.disabled_option')) || 
+          (input.type === 'radio' && input.checked && input.classList.contains('disabled'))) {
+        // input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });*/
+  }
+  // Initialize when variant controls exist
+  if (document.querySelector('variant-selects')) {
+    initVariantAutoSwitch();
+    const variantSelects = document.querySelectorAll('.select__select');
+
+    variantSelects.forEach(select => {
+      /* 1. clear any <option selected> Shopify printed */
+        select.options[0].classList.remove('disabled_option');
+      [...select.options].forEach(o => o.removeAttribute('selected'));
+  
+      /* 2. select the placeholder (index 0) */
+      select.selectedIndex = 0;
+      select.options[0].setAttribute('selected', 'selected'); // keeps the markup consistent
+  
+      /* 3. tell the theme JS that the selection changed */
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      setTimeout(() => {
+      },1000);
+    });
+    
+  }
+</script> 
